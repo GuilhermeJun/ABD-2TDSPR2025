@@ -1,6 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11620.152 stable
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2TDSPR25", "2TDSPR25\2TDSPR25.csproj", "{63E6CFFF-A53A-4919-891C-4AF4E7CD666A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoAppTest", "TodoAppTest\TodoAppTest.csproj", "{E368CB62-6F62-46FD-B212-9AED9F670B0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +17,15 @@ Global
 		{63E6CFFF-A53A-4919-891C-4AF4E7CD666A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E6CFFF-A53A-4919-891C-4AF4E7CD666A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63E6CFFF-A53A-4919-891C-4AF4E7CD666A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E368CB62-6F62-46FD-B212-9AED9F670B0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E368CB62-6F62-46FD-B212-9AED9F670B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E368CB62-6F62-46FD-B212-9AED9F670B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E368CB62-6F62-46FD-B212-9AED9F670B0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {10C3BF44-6F86-42B3-904C-A3D7AFBEEA74}
 	EndGlobalSection
 EndGlobal

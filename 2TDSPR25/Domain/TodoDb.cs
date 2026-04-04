@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace _2TDSPR25;
+namespace _2TDSPR25.Domain;
 
 public class TodoDb : DbContext
 {
