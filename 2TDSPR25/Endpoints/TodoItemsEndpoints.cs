@@ -43,23 +43,7 @@ namespace _2TDSPR25.Endpoints
                 .Produces<TodoItemDTO>(200)
                 .Produces(404);
 
-            todoItems.MapPost("/", async (TodoItemDTO todoItemDTO) =>
-            {
-                using var scope = app.Services.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<TodoDb>();
-                var todoItem = new Todo
-                {
-                    IsComplete = todoItemDTO.IsComplete,
-                    Name = todoItemDTO.Name
-                };
-
-                db.Todos.Add(todoItem);
-                await db.SaveChangesAsync();
-
-                todoItemDTO = new TodoItemDTO(todoItem);
-
-                return TypedResults.Created($"/todoitems/{todoItem.Id}", todoItemDTO);
-            })
+            todoItems.MapPost("/", CreateTodo)
                 .WithName("CreateTodo")
                 .WithSummary("Cria uma nova tarefa")
                 .WithDescription("Cria uma nova tarefa. O id da tarefa é gerado automaticamente pelo sistema.")
@@ -139,9 +123,9 @@ namespace _2TDSPR25.Endpoints
                 db.Todos.Remove(todo);
                 await db.SaveChangesAsync();
 
-                return Results.NoContent();
+                return TypedResults.NoContent();
             }
-            return Results.NotFound();
+            return TypedResults.NotFound();
         }
         #endregion
     }
