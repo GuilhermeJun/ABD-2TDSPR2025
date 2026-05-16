@@ -1,6 +1,5 @@
 ﻿using _2TDSPR25.Domain;
 using IdempotentAPI.MinimalAPI;
-using IdentityModel.OidcClient;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 
@@ -49,8 +48,8 @@ namespace _2TDSPR25.Endpoints
                 .WithDescription("Cria uma nova tarefa. O id da tarefa é gerado automaticamente pelo sistema.")
                 .Produces<TodoItemDTO>(201)
                 .Produces(400)
-                .AddEndpointFilter<IdempotentAPIEndpointFilter>()
-                .Accepts<TodoItemDTO>("application/json", "application/xml");
+                .AddEndpointFilter<IdempotentAPIEndpointFilter>();
+                //.Accepts<TodoItemDTO>("application/json", "application/xml");
 
             todoItems.MapPut("/{id}", UpdateTodo);
 
@@ -59,9 +58,8 @@ namespace _2TDSPR25.Endpoints
                 .WithSummary("Delete uma tarefa pelo seu id")
                 .WithDescription("Deleta uma tarefa pelo seu id. Se a tarefa não for encontrada, " + "retorna um status code 404 (Not Found).")
                 .Produces(204)
-                .Produces(400);
-
-            //.Accepts<TodoItemDTO>("application/json", "application/xml");;
+                .Produces(400)
+                .Accepts<TodoItemDTO>("application/json", "application/xml");
 
             app.Run();
 
@@ -90,8 +88,8 @@ namespace _2TDSPR25.Endpoints
         {
             var todoItem = new Todo
             {
-                IsComplete = todoItemDTO.IsComplete,
-                Name = todoItemDTO.Name
+                Name = todoItemDTO.Name,
+                IsComplete = todoItemDTO.IsComplete
             };
 
             db.Todos.Add(todoItem);
@@ -99,15 +97,17 @@ namespace _2TDSPR25.Endpoints
 
             todoItemDTO = new TodoItemDTO(todoItem);
 
-            return TypedResults.Created($"/todoitems/{todoItemDTO.Id}", todoItemDTO);
+            return TypedResults.Created($"/todoitems/{todoItem.Id}", todoItemDTO);
         }
 
-        static async Task<IResult> UpdateTodo([Description("id da tarefa que será buscada.")] int id, TodoItemDTO todoItemDTO, TodoDb db)
+        static async Task<IResult> UpdateTodo([Description("id da tarefa que será buscada.")] int id, TodoItemDTO todoItemDTO, HttpContext http)
         {
+            var db = http.RequestServices.GetRequiredService<TodoDb>();
+
             var todo = await db.Todos.FindAsync(id);
 
             if (todo is null) return TypedResults.NotFound();
-            
+
             todo.Name = todoItemDTO.Name;
             todo.IsComplete = todoItemDTO.IsComplete;
 
@@ -116,8 +116,10 @@ namespace _2TDSPR25.Endpoints
             return TypedResults.NoContent();
         }
 
-        static async Task<IResult> DeleteTodo([Description("id da tarefa que será buscada.")] int id, TodoDb db)
+        static async Task<IResult> DeleteTodo([Description("id da tarefa que será buscada.")] int id, HttpContext http)
         {
+            var db = http.RequestServices.GetRequiredService<TodoDb>();
+
             if (await db.Todos.FindAsync(id) is Todo todo)
             {
                 db.Todos.Remove(todo);
